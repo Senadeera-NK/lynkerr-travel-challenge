@@ -1,18 +1,31 @@
 import { listingService } from "@/services/listingService";
 import ListingCard from "../components/ListingCard";
 import { Listing } from "@/types";
+import Link from "next/link"; // Added for the 'Clear' functionality
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
-  // 1. Fetch data from the Service Layer (Server-side)
-  const listings: Listing[] = await listingService.getAllListings();
-  const { search } = await searchParams;
+  // 1. Await searchParams to get the current query
+  const params = await searchParams;
+  const search = params.search;
+
+  // 2. Fetch data (the service now handles the if(search) logic we discussed)
+  const listings: Listing[] = await listingService.getAllListings(search);
   
   return (
     <section>
       <div className="flex justify-between items-end mb-8">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">Explore the World</h1>
-          <p className="text-gray-500 mt-2">Discover unique experiences shared by travelers.</p>
+          {search && (
+            <div className="flex items-center gap-2 mt-2">
+              <p className="text-blue-600 font-medium">
+                Showing results for "{search}"
+              </p>
+              <Link href="/" className="text-xs text-gray-400 hover:text-red-500 underline">
+                Clear search
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -20,7 +33,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         <form action="/" method="GET" className="relative">
           <input 
             name="search"
-            defaultValue={search}
+            defaultValue={search || ''} 
             placeholder="Search by title or location..."
             className="w-full p-4 pl-12 rounded-2xl border shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
           />
@@ -28,13 +41,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ s
         </form>
       </div>
 
-      {/* 2. Check if there are listings */}
+      {/* Render logic */}
       {listings.length === 0 ? (
         <div className="text-center py-20 border-2 border-dashed rounded-xl">
-          <p className="text-gray-400 text-lg">No experiences found. Be the first to post!</p>
+          <p className="text-gray-400 text-lg">No experiences found matching your search.</p>
         </div>
       ) : (
-        /* 3. Render the Grid */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((item) => (
             <ListingCard key={item.id} listing={item} />

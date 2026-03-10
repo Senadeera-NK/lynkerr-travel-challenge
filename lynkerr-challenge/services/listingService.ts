@@ -30,8 +30,8 @@ async getAllListings(searchTerm?: string): Promise<Listing[]> {
     .select('*, profiles(display_name)')
     .order('created_at', { ascending: false });
 
-  if (searchTerm) {
-    // Search in both Title and Location
+  // Only apply filtering if searchTerm is NOT empty/undefined
+  if (searchTerm && searchTerm.trim() !== "") {
     query = query.or(`title.ilike.%${searchTerm}%,location.ilike.%${searchTerm}%`);
   }
 
