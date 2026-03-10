@@ -2,28 +2,29 @@ import { listingService } from "@/services/listingService";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
+// Update the interface to show that params is a Promise
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ListingDetailPage({ params }: PageProps) {
-  // 1. Fetch data from your service
-  const listing = await listingService.getListingById(params.id);
+  // 1. UNWRAP the params first
+  const { id } = await params;
 
-  // 2. If ID doesn't exist in DB, show the 404 page
+  // 2. Fetch data using the unwrapped id
+  const listing = await listingService.getListingById(id);
+
   if (!listing) {
     notFound();
   }
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      {/* Back Button */}
       <Link href="/" className="text-sm text-gray-500 hover:text-blue-600 mb-6 inline-block">
         ← Back to all experiences
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Left Column: Image */}
         <div className="rounded-3xl overflow-hidden bg-gray-100 shadow-lg h-[400px] lg:h-[500px]">
           <img 
             src={listing.image_url || 'https://placehold.co/800x600?text=No+Image'} 
@@ -32,7 +33,6 @@ export default async function ListingDetailPage({ params }: PageProps) {
           />
         </div>
 
-        {/* Right Column: Info & Booking Box */}
         <div className="flex flex-col">
           <div className="mb-6">
             <span className="text-blue-600 font-bold text-sm tracking-widest uppercase">
