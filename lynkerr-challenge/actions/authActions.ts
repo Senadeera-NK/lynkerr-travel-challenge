@@ -3,6 +3,7 @@
 import { authService } from '@/services/authService';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { createClient } from '@/lib/supabase/server';
 
 export async function handleSignUp(formData: FormData) {
   const email = formData.get('email') as string;
@@ -31,4 +32,11 @@ export async function handleLogin(formData: FormData) {
 
   revalidatePath('/', 'layout');
   redirect('/'); 
+}
+
+export async function handleLogout() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  revalidatePath('/', 'layout');
+  redirect('/');
 }
