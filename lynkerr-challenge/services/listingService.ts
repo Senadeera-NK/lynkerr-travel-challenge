@@ -50,5 +50,26 @@ export const listingService = {
 
     if (error) throw error;
     return data;
+  },
+
+  async toggleFavorite(listingId: string, userId: string) {
+  const supabase = await createClient();
+  
+  // Check if already liked
+  const { data } = await supabase
+    .from('favorites')
+    .select()
+    .eq('listing_id', listingId)
+    .eq('user_id', userId)
+    .single();
+
+  if (data) {
+    // Unlike
+    return await supabase.from('favorites').delete().eq('id', data.id);
+  } else {
+    // Like
+    return await supabase.from('favorites').insert({ listing_id: listingId, user_id: userId });
   }
+ }
 };
+
