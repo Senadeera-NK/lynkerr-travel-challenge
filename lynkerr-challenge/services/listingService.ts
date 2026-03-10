@@ -70,6 +70,20 @@ export const listingService = {
     // Like
     return await supabase.from('favorites').insert({ listing_id: listingId, user_id: userId });
   }
- }
+ },
+ 
+ // Add to src/services/listingService.ts
+async checkIfFavorited(listingId: string, userId: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('favorites')
+    .select('id')
+    .eq('listing_id', listingId)
+    .eq('user_id', userId)
+    .single();
+    
+  return !!data;
+}
 };
+
 
