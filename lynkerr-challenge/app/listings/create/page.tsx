@@ -36,10 +36,17 @@ export default function CreateListingPage() {
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold mb-2">Image URL</label>
-          <input name="image_url" placeholder="https://images.unsplash.com/..." required className="w-full p-3 border rounded-xl" />
-        </div>
+            <div>
+            <label className="block text-sm font-semibold mb-2">Upload Photo</label>
+            <input 
+                name="image_file" 
+                type="file" 
+                accept="image/*" 
+                required 
+                className="w-full p-3 border rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" 
+            />
+            <p className="text-xs text-gray-400 mt-1">PNG, JPG or WebP (Max 5MB)</p>
+            </div>
 
         <div>
           <label className="block text-sm font-semibold mb-2">Description</label>
