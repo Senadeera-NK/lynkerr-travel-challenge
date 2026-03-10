@@ -5,16 +5,25 @@ import { useState } from "react";
 
 export default function CreateListingPage() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string|null>(null);
 
+      async function clientAction(formData: FormData) {
+      setLoading(true);
+      setError(null);
+      
+      const result = await handleCreateListing(formData);
+      
+      // If the action returns an error object, show it!
+      if (result?.error) {
+        setError(result.error);
+        setLoading(false);
+      }
+    }
   return (
     <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-sm border">
       <h1 className="text-2xl font-bold mb-6">Post a New Experience</h1>
       
-      <form action={async (formData) => {
-        setLoading(true);
-        await handleCreateListing(formData);
-        setLoading(false);
-      }} className="space-y-6">
+      <form action={clientAction} className="space-y-6">
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -23,7 +32,7 @@ export default function CreateListingPage() {
           </div>
           <div>
             <label className="block text-sm font-semibold mb-2">Location</label>
-            <input name="title" placeholder="Ella, Sri Lanka" required className="w-full p-3 border rounded-xl" />
+            <input name="location" placeholder="Ella, Sri Lanka" required className="w-full p-3 border rounded-xl" />
           </div>
         </div>
 
@@ -42,6 +51,12 @@ export default function CreateListingPage() {
           <input name="price" type="number" placeholder="50" required className="w-full p-3 border rounded-xl" />
         </div>
 
+                {/* Error Alert Box */}
+            {error && (
+                <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm border border-red-200">
+                ⚠️ {error}
+                </div>
+            )}
         <button 
           disabled={loading}
           type="submit" 
