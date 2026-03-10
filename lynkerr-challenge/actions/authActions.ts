@@ -10,6 +10,14 @@ export async function handleSignUp(formData: FormData) {
   const password = formData.get('password') as string;
   const displayName = formData.get('displayName') as string;
 
+  // SIMPLE VALIDATION
+  if (!email.includes('@')) {
+    return { error: "Invalid email format" };
+  }
+  if (password.length < 6) {
+    return { error: "Password must be at least 6 characters" };
+  }
+
   try {
     await authService.signUp(email, password, displayName);
   } catch (error) {
@@ -17,7 +25,7 @@ export async function handleSignUp(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/'); // Redirect to main feed after signup
+  redirect('/auth/signin'); // Redirect to the signin
 }
 
 export async function handleLogin(formData: FormData) {
