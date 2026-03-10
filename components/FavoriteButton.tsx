@@ -7,7 +7,7 @@ interface FavoriteButtonProps {
   listingId: string;
   initialIsFavorited: boolean;
   isLoggedIn: boolean;
-  userId?: string; // Add this
+  userId?: string;
 }
 
 export default function FavoriteButton({ 
@@ -24,10 +24,10 @@ export default function FavoriteButton({
       return;
     }
 
-    // 1. Instant feedback for the user
+    //Instant feedback for the user
     setIsFavorited(!isFavorited);
     
-    // 2. Save to Supabase
+    //saving to the db
     await handleToggleFavorite(listingId, userId);
   };
 

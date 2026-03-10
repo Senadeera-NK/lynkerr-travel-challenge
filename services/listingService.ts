@@ -73,8 +73,8 @@ async getAllListings(searchTerm?: string): Promise<Listing[]> {
   }
  },
 
- // Add to src/services/listingService.ts
-async checkIfFavorited(listingId: string, userId: string): Promise<boolean> {
+
+ async checkIfFavorited(listingId: string, userId: string): Promise<boolean> {
   const supabase = await createClient();
   const { data } = await supabase
     .from('favorites')

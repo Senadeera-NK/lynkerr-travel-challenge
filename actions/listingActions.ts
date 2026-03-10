@@ -11,28 +11,27 @@ export async function handleCreateListing(formData: FormData) {
   const user = await authService.getUser();
   if (!user) return { error: "Login required" };
 
-  const imageFile = formData.get('image_file') as File; // Get the file object
+  const imageFile = formData.get('image_file') as File;
   let publicUrl = '';
 
   try {
-    // 1. Upload the file first
+    //uploading the files to supabase bucket
     if (imageFile && imageFile.size > 0) {
       publicUrl = await storageService.uploadImage(imageFile);
     }
 
-    // 2. Save listing with the new URL
     const rawData = {
       title: formData.get('title') as string,
       location: formData.get('location') as string,
       description: formData.get('description') as string,
       price: Number(formData.get('price')),
-      image_url: publicUrl, // Use the URL from Supabase Storage
+      image_url: publicUrl, 
       user_id: user.id
     };
 
     await listingService.createListing(rawData);
   } catch (error) {
-    console.error("DEBUG ERROR:", error); // Check your VS Code terminal for this!
+    // console.error("DEBUG ERROR:", error);
     return { error: "Failed to upload image or save listing" };
   }
 
@@ -52,14 +51,14 @@ export async function handleDeleteListing(listingId: string) {
       .from('listings')
       .delete()
       .eq('id', listingId)
-      .eq('user_id', user.id); // Double security check
+      .eq('user_id', user.id);
 
     if (error) {
       console.error("Supabase Delete Error:", error);
       return { error: error.message };
     }
 
-    // Tell Next.js to clear the cache for the home page
+    //claening the cache of next.js
     revalidatePath('/');
     
   } catch (err) {
@@ -67,6 +66,5 @@ export async function handleDeleteListing(listingId: string) {
     return { error: "An unexpected error occurred" };
   }
 
-  // Redirect MUST happen after the try/catch or it will be caught as an error
   redirect('/');
 }

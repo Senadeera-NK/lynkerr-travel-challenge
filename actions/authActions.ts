@@ -10,7 +10,7 @@ export async function handleSignUp(formData: FormData) {
   const password = formData.get('password') as string;
   const displayName = formData.get('displayName') as string;
 
-  // SIMPLE VALIDATION
+  // validations for mail and password
   if (!email.includes('@')) {
     return { error: "Invalid email format" };
   }
@@ -25,9 +25,10 @@ export async function handleSignUp(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/auth/login'); // Redirect to the signin
+  redirect('/auth/login'); 
 }
 
+// login handling function
 export async function handleLogin(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -42,6 +43,7 @@ export async function handleLogin(formData: FormData) {
   redirect('/'); 
 }
 
+//logout function
 export async function handleLogout() {
   const supabase = await createClient();
   await supabase.auth.signOut();

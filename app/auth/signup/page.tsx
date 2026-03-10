@@ -14,7 +14,7 @@ export default function SignUpPage() {
     
     const result = await handleSignUp(formData);
     
-    // If the action returns an error object, show it!
+    // erorr handling
     if (result?.error) {
       setError(result.error);
       setLoading(false);
@@ -46,7 +46,7 @@ export default function SignUpPage() {
                 {/* Error Alert Box */}
             {error && (
                 <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm border border-red-200">
-                ⚠️ {error}
+                 {error}
                 </div>
             )}
         

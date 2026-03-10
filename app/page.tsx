@@ -1,14 +1,14 @@
 import { listingService } from "@/services/listingService";
 import ListingCard from "../components/ListingCard";
 import { Listing } from "@/types";
-import Link from "next/link"; // Added for the 'Clear' functionality
+import Link from "next/link"; 
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
-  // 1. Await searchParams to get the current query
+  // searchParams to get the current query
   const params = await searchParams;
   const search = params.search;
 
-  // 2. Fetch data (the service now handles the if(search) logic we discussed)
+  // fetch the data or uses for searching
   const listings: Listing[] = await listingService.getAllListings(search);
   
   return (

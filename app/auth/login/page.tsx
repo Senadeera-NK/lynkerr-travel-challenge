@@ -14,7 +14,7 @@ export default function LoginPage() {
     
     const result = await handleLogin(formData);
     
-    // If the action returns an error object, show it!
+    //error handling
     if (result?.error) {
       setError(result.error);
       setLoading(false);
@@ -41,7 +41,7 @@ export default function LoginPage() {
         {/* Error Alert Box */}
             {error && (
                 <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm border border-red-200">
-                ⚠️ {error}
+                {error}
                 </div>
             )}
             

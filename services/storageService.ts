@@ -4,7 +4,7 @@ export const storageService = {
   async uploadImage(file: File) {
     const supabase = await createClient();
     
-    // Create a unique filename (e.g., 17152345-my-photo.jpg)
+    // Create a unique filename 
     const fileExt = file.name.split('.').pop();
     const fileName = `${Math.random()}-${Date.now()}.${fileExt}`;
     const filePath = `public/${fileName}`;

@@ -54,7 +54,7 @@ export default async function ListingCard({ listing }: { listing : Listing }) {
           </p>
         </div>
 
-        {/* Short Description (Required by instructions) */}
+        {/* Short Description */}
         <p className="text-gray-600 text-sm line-clamp-2 mb-4 h-10">
           {listing.description}
         </p>
@@ -67,7 +67,7 @@ export default async function ListingCard({ listing }: { listing : Listing }) {
               isLoggedIn={!!user}
               userId={user?.id}
             />
-            {/* Added "By [Name]" here to satisfy the requirement */}
+            {/* Added "By userName"  */}
             <span className="text-[11px] text-gray-400 font-medium">
               By {listing.profiles?.display_name || "Traveler"}
             </span>

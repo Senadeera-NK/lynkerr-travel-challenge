@@ -85,7 +85,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* Minimalist Pricing (No Frame) */}
+          {/* Pricing section*/}
           <div className="py-6 flex items-center justify-between border-t mt-auto">
             <div>
               <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">Price per person</p>

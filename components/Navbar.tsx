@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { authService } from '@/services/authService';
-import { handleLogout } from '@/actions/authActions'; // We will add this action next
+import { handleLogout } from '@/actions/authActions';
 
 export default async function Navbar() {
   const user = await authService.getUser();
@@ -8,12 +8,12 @@ export default async function Navbar() {
   return (
     <nav className="border-b bg-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* 1. Logo Section */}
+        {/*Logo Section */}
         <Link href="/" className="text-2xl font-black text-blue-600 tracking-tighter">
           LYNKERR
         </Link>
 
-        {/* 2. Navigation Links */}
+        {/* Navigation Links */}
         <div className="flex items-center gap-6">
           <Link href="/" className="text-sm font-medium text-gray-600 hover:text-blue-600">
             Explore
