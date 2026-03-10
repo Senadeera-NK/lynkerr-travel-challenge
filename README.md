@@ -40,7 +40,6 @@ A full-stack marketplace where local experience providers can list unique travel
 1. **Clone the repository:**
    ```bash
    git clone [https://github.com/Senadeera-NK/lynkerr-travel-challenge.git](https://github.com/Senadeera-NK/lynkerr-travel-challenge.git)
-   cd lynkerr-travel-challenge
    ```
 
 2. **Clone the repository:**
