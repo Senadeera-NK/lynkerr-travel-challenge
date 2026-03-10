@@ -23,7 +23,7 @@ export default function CreateListingPage() {
     <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-sm border">
       <h1 className="text-2xl font-bold mb-6">Post a New Experience</h1>
       
-      <form action={clientAction} className="space-y-6">
+      <form action={clientAction} encType="multipart/form-data" className="space-y-6">
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>

@@ -31,6 +31,7 @@ export async function handleCreateListing(formData: FormData) {
 
     await listingService.createListing(rawData);
   } catch (error) {
+    console.error("DEBUG ERROR:", error); // Check your VS Code terminal for this!
     return { error: "Failed to upload image or save listing" };
   }
 
