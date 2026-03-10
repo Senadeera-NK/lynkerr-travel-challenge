@@ -1,7 +1,7 @@
 ### Lynkerr Travel Experience Platform
 # A full-stack marketplace where local experience providers can list unique travel activities, and travelers can discover them through a real-time public feed.
 
-- Live Demo: [Link to your Vercel deployment]
+- Live Demo: https://lynkerr-travel-challenge.vercel.app/
 
 Built for: Lynkerr Full-Stack Technical Challenge
 
@@ -44,7 +44,7 @@ Clone the repository:
 
 Bash
 
-git clone [your-repo-link]
+git clone [your-repo-link](https://github.com/Senadeera-NK/lynkerr-travel-challenge.git)
 cd lynkerr-challenge
 Install dependencies:
 
