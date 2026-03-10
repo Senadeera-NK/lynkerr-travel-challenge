@@ -43,11 +43,11 @@ export default async function Navbar() {
           ) : (
             // GUEST STATE
             <div className="flex items-center gap-4">
-              <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-blue-600">
+              <Link href="/auth/login" className="text-sm font-medium text-gray-600 hover:text-blue-600">
                 Login
               </Link>
               <Link 
-                href="/signup" 
+                href="/auth/signup" 
                 className="text-sm font-semibold border-2 border-blue-600 text-blue-600 px-4 py-1.5 rounded-full hover:bg-blue-50 transition"
               >
                 Sign Up
