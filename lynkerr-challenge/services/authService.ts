@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-
+import {User} from '@supabase/supabase-js';
 export const authService = {
   // Sign Up
   async signUp(email: string, password: string, displayName: string) {
@@ -29,7 +29,7 @@ export const authService = {
   },
 
   // Get current user session
-  async getUser() {
+  async getUser():Promise<User | null> {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     return user;
