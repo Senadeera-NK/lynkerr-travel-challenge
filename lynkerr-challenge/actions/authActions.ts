@@ -25,7 +25,7 @@ export async function handleSignUp(formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/auth/signin'); // Redirect to the signin
+  redirect('/auth/login'); // Redirect to the signin
 }
 
 export async function handleLogin(formData: FormData) {
