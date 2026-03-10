@@ -39,21 +39,34 @@ export async function handleCreateListing(formData: FormData) {
   revalidatePath('/');
   redirect('/');
 }
+
+
 export async function handleDeleteListing(listingId: string) {
   const user = await authService.getUser();
   if (!user) throw new Error("Unauthorized");
 
   const supabase = await createClient();
   
-  // RLS will handle the security, but we specify the user_id for safety
-  const { error } = await supabase
-    .from('listings')
-    .delete()
-    .eq('id', listingId)
-    .eq('user_id', user.id);
+  try {
+    const { error } = await supabase
+      .from('listings')
+      .delete()
+      .eq('id', listingId)
+      .eq('user_id', user.id); // Double security check
 
-  if (error) throw error;
+    if (error) {
+      console.error("Supabase Delete Error:", error);
+      return { error: error.message };
+    }
 
-  revalidatePath('/');
+    // Tell Next.js to clear the cache for the home page
+    revalidatePath('/');
+    
+  } catch (err) {
+    console.error("Delete Action Crash:", err);
+    return { error: "An unexpected error occurred" };
+  }
+
+  // Redirect MUST happen after the try/catch or it will be caught as an error
   redirect('/');
 }

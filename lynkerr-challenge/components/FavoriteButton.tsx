@@ -1,46 +1,42 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react';
+import { handleToggleFavorite } from '@/actions/favoriteActions';
 
-interface Props {
+interface FavoriteButtonProps {
   listingId: string;
   initialIsFavorited: boolean;
   isLoggedIn: boolean;
+  userId?: string; // Add this
 }
 
-export default function FavoriteButton({ listingId, initialIsFavorited, isLoggedIn }: Props) {
+export default function FavoriteButton({ 
+  listingId, 
+  initialIsFavorited, 
+  isLoggedIn, 
+  userId 
+}: FavoriteButtonProps) {
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
-  const router = useRouter();
 
-  const handleToggle = async () => {
-    if (!isLoggedIn) {
-      router.push('/login');
+  const toggle = async () => {
+    if (!isLoggedIn || !userId) {
+      alert("Please login to save experiences!");
       return;
     }
 
-    // Optimistic Update: Change the UI immediately
+    // 1. Instant feedback for the user
     setIsFavorited(!isFavorited);
-
-    try {
-      // We'll create this Server Action next
-      // await toggleFavoriteAction(listingId); 
-    } catch (error) {
-      // Revert if it fails
-      setIsFavorited(isFavorited);
-    }
+    
+    // 2. Save to Supabase
+    await handleToggleFavorite(listingId, userId);
   };
 
-return (
-  <button
-    onClick={handleToggle}
-    className={`p-3 rounded-full border transition-all duration-300 group ${
-      isFavorited ? 'bg-red-50 border-red-200' : 'hover:bg-gray-50'
-    }`}
-  >
-      <span className={`text-2xl transition-transform active:scale-125 inline-block ${
-        isFavorited ? 'scale-110' : ''
-      }`}>
+  return (
+    <button 
+      onClick={toggle} 
+      className="p-2 rounded-full hover:bg-gray-50 transition-all active:scale-90"
+    >
+      <span className="text-2xl">
         {isFavorited ? '❤️' : '🤍'}
       </span>
     </button>

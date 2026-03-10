@@ -1,7 +1,7 @@
 import { listingService } from "@/services/listingService";
 import { authService } from "@/services/authService";
 import FavoriteButton from "@/components/FavoriteButton";
-import { handleDeleteListing } from "@/actions/listingActions"; // 1. ADD THIS IMPORT
+import { handleDeleteListing } from "@/actions/listingActions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -42,11 +42,29 @@ export default async function ListingDetailPage({ params }: PageProps) {
                 </span>
                 <h1 className="text-5xl font-black text-gray-900 mt-4 leading-tight">{listing.title}</h1>
               </div>
-              <FavoriteButton 
-                listingId={id} 
-                initialIsFavorited={isFavorited} 
-                isLoggedIn={!!user} 
-              />
+              
+              {/* Action Group: Heart and Delete aligned together */}
+              <div className="flex items-center gap-3">
+                {user && user.id === listing.user_id && (
+                  <form action={async () => {
+                    'use server';
+                    await handleDeleteListing(listing.id);
+                  }}>
+                    <button 
+                      className="bg-red-50 text-red-600 px-4 py-2 rounded-full text-xs font-bold uppercase border border-red-100 hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                    >
+                      Delete
+                    </button>
+                  </form>
+                )}
+                
+                <FavoriteButton 
+                  listingId={id} 
+                  initialIsFavorited={isFavorited} 
+                  isLoggedIn={!!user} 
+                  userId={user?.id} 
+                />
+              </div>
             </div>
             
             <div className="flex items-center gap-3 mt-6 pb-6 border-b">
@@ -67,31 +85,20 @@ export default async function ListingDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* 2. ADD THE OWNER ACTIONS HERE */}
-          {user && user.id === listing.user_id && (
-            <div className="mb-8 p-6 bg-red-50/50 rounded-3xl border border-red-100">
-              <h4 className="text-xs font-bold text-red-600 uppercase tracking-widest mb-3">Owner Settings</h4>
-              <form action={async () => {
-                'use server';
-                await handleDeleteListing(listing.id);
-              }}>
-                <button className="text-sm text-red-600 font-bold hover:bg-red-600 hover:text-white border border-red-200 px-4 py-2 rounded-xl transition-all">
-                  Delete Experience Permanently
-                </button>
-              </form>
-            </div>
-          )}
-
-          <div className="p-6 bg-white rounded-3xl border shadow-sm flex items-center justify-between">
+          {/* Minimalist Pricing (No Frame) */}
+          <div className="py-6 flex items-center justify-between border-t mt-auto">
             <div>
-              <p className="text-gray-500 text-sm">Price per person</p>
-              <p className="text-3xl font-black text-gray-900">${listing.price || 'Free'}</p>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">Price per person</p>
+              <p className="text-3xl font-black text-gray-900 mt-1">${listing.price || '0'}</p>
             </div>
+            
             {!user && (
-               <Link href="/login" className="text-blue-600 font-bold hover:underline text-sm">
-                Log in to save this →
+               <Link href="/login" className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-gray-800 transition text-sm">
+                Log in to save
               </Link>
             )}
+
+
           </div>
         </div>
       </div>
