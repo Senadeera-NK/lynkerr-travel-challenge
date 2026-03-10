@@ -22,22 +22,23 @@ export const listingService = {
     return listing;
   },
 
-  // READ: Get all listings (Newest First)
-  async getAllListings():Promise<Listing[]> {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from('listings')
-      .select(`
-        *,
-        profiles (
-          display_name
-        )
-      `)
-      .order('created_at', { ascending: false });
+  // READ: Get all listings (Newest First) and search listing
+async getAllListings(searchTerm?: string): Promise<Listing[]> {
+  const supabase = await createClient();
+  let query = supabase
+    .from('listings')
+    .select('*, profiles(display_name)')
+    .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    return data;
-  },
+  if (searchTerm) {
+    // Search in both Title and Location
+    query = query.or(`title.ilike.%${searchTerm}%,location.ilike.%${searchTerm}%`);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
+},
 
   // READ: Get a single listing by ID (For Detail Page)
   async getListingById(id: string):Promise<Listing> {
@@ -71,7 +72,7 @@ export const listingService = {
     return await supabase.from('favorites').insert({ listing_id: listingId, user_id: userId });
   }
  },
- 
+
  // Add to src/services/listingService.ts
 async checkIfFavorited(listingId: string, userId: string): Promise<boolean> {
   const supabase = await createClient();
@@ -83,7 +84,8 @@ async checkIfFavorited(listingId: string, userId: string): Promise<boolean> {
     .single();
     
   return !!data;
-}
+},
+
 };
 
 

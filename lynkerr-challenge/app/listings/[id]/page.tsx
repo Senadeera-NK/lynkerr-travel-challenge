@@ -1,6 +1,7 @@
 import { listingService } from "@/services/listingService";
 import { authService } from "@/services/authService";
 import FavoriteButton from "@/components/FavoriteButton";
+import { handleDeleteListing } from "@/actions/listingActions"; // 1. ADD THIS IMPORT
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -13,7 +14,6 @@ export default async function ListingDetailPage({ params }: PageProps) {
   const listing = await listingService.getListingById(id);
   const user = await authService.getUser();
   
-  // Check if user has already liked this (we'll add this service method next)
   const isFavorited = user ? await listingService.checkIfFavorited(id, user.id) : false;
 
   if (!listing) notFound();
@@ -25,7 +25,6 @@ export default async function ListingDetailPage({ params }: PageProps) {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Sticky Media Column */}
         <div className="rounded-3xl overflow-hidden bg-gray-100 shadow-xl h-[400px] lg:h-[600px] sticky top-24">
           <img 
             src={listing.image_url || 'https://placehold.co/800x600'} 
@@ -34,7 +33,6 @@ export default async function ListingDetailPage({ params }: PageProps) {
           />
         </div>
 
-        {/* Content Column */}
         <div className="flex flex-col">
           <div className="mb-8">
             <div className="flex justify-between items-start">
@@ -44,8 +42,6 @@ export default async function ListingDetailPage({ params }: PageProps) {
                 </span>
                 <h1 className="text-5xl font-black text-gray-900 mt-4 leading-tight">{listing.title}</h1>
               </div>
-              
-              {/* The Heart Button */}
               <FavoriteButton 
                 listingId={id} 
                 initialIsFavorited={isFavorited} 
@@ -71,7 +67,21 @@ export default async function ListingDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* Pricing Bottom Bar */}
+          {/* 2. ADD THE OWNER ACTIONS HERE */}
+          {user && user.id === listing.user_id && (
+            <div className="mb-8 p-6 bg-red-50/50 rounded-3xl border border-red-100">
+              <h4 className="text-xs font-bold text-red-600 uppercase tracking-widest mb-3">Owner Settings</h4>
+              <form action={async () => {
+                'use server';
+                await handleDeleteListing(listing.id);
+              }}>
+                <button className="text-sm text-red-600 font-bold hover:bg-red-600 hover:text-white border border-red-200 px-4 py-2 rounded-xl transition-all">
+                  Delete Experience Permanently
+                </button>
+              </form>
+            </div>
+          )}
+
           <div className="p-6 bg-white rounded-3xl border shadow-sm flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Price per person</p>
